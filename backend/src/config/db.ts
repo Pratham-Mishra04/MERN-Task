@@ -12,6 +12,7 @@ const connectToDB = () =>
         .then(() => console.log('Connected to Database!'))
         .catch(err => {
             console.error('Cannot connect to Database: ', err);
+            process.exit();
         });
 
 export default connectToDB;

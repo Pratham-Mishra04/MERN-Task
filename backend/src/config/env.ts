@@ -12,16 +12,26 @@ interface ENV_struct {
     DATABASE_PASSWORD: string;
     JWT_KEY: string;
     JWT_EXP_TIME: string;
+    EMAIL_HOST: string;
+    EMAIL_PORT: string;
+    EMAIL_USER: string;
+    EMAIL_USERNAME: string;
+    EMAIL_PASS: string;
 }
 
 const ENV: ENV_struct = {
     NODE_ENV: 'development',
     PORT: '8000',
     FRONTEND_URL: 'http://127.0.0.1:3000',
-    DATABASE_URL: '',
-    DATABASE_PASSWORD: '',
-    JWT_KEY: '',
-    JWT_EXP_TIME: '',
+    DATABASE_URL: 'mongo_url',
+    DATABASE_PASSWORD: 'password',
+    JWT_KEY: 'secret',
+    JWT_EXP_TIME: '15',
+    EMAIL_HOST: '',
+    EMAIL_PORT: '',
+    EMAIL_USER: '',
+    EMAIL_USERNAME: '',
+    EMAIL_PASS: '',
 };
 
 const configENV = (): void => {
@@ -31,7 +41,7 @@ const configENV = (): void => {
 
         if (val === undefined) {
             console.error(`Fatal Error: Missing required environment variable: ${key}`);
-            process.exit(1);
+            process.exit();
         }
 
         ENV[key] = val;

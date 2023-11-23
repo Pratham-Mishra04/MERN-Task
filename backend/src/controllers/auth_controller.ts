@@ -5,7 +5,7 @@ import AppError from '../config/app_error';
 import catchAsync from '../config/catch_async';
 import { ENV } from '../config/env';
 import User, { UserDocument } from '../models/user_model';
-// import sendEmail from '../utils/Email';
+import sendEmail from '../utils/mailer';
 
 export const createSendToken = (user: UserDocument, statusCode: number, res: Response) => {
     const token = jwt.sign({ id: user._id }, ENV.JWT_KEY, {
@@ -56,34 +56,35 @@ export const logout = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-// export const forgotPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-//     const user = await User.findOne({ username: req.body.username });
-//     if (!user) return next(new AppError('No User of this username found', 401));
-//     const resetToken = user.createPasswordResetToken();
-//     await user.save({ validateBeforeSave: false });
+export const forgotPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findOne({ username: req.body.username });
+    if (!user) return next(new AppError('No User of this username found', 401));
+    const resetToken = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
 
-//     const URL = `${req.protocol}://${req.get('host')}/resetPassword/${user.id}/${resetToken}`;
-//     const EmailSubject = `Reset your Password!`;
-//     const EmailBody = `Forgot your Password? Click here to reset: ${URL}`;
-//     try {
-//         await sendEmail({
-//             email: user.email,
-//             subject: EmailSubject,
-//             body: EmailBody,
-//         });
-//         res.status(200).json({
-//             status: 'success',
-//             requestedAt: req.requestedAt,
-//             message: 'Reset URL send to registered email.',
-//         });
-//     } catch (err) {
-//         user.passwordResetToken = undefined;
-//         user.passwordResetTokenExpiresIn = undefined;
-//         await user.save({ validateBeforeSave: false });
+    const URL = `${req.protocol}://${req.get('host')}/resetPassword/${user.id}/${resetToken}`;
+    const EmailSubject = `Reset your Password!`;
+    const EmailBody = `Forgot your Password? Click here to reset: ${URL}`;
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: EmailSubject,
+            body: EmailBody,
+            template: 'forgot_password',
+        });
+        res.status(200).json({
+            status: 'success',
+            requestedAt: req.requestedAt,
+            message: 'Reset URL send to registered email.',
+        });
+    } catch (err) {
+        user.passwordResetToken = undefined;
+        user.passwordResetTokenExpiresIn = undefined;
+        await user.save({ validateBeforeSave: false });
 
-//         return next(new AppError('There was an error sending the email', 500));
-//     }
-// });
+        return next(new AppError('There was an error sending the email', 500));
+    }
+});
 
 export const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findOne({ _id: req.body.userID });

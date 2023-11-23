@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { login, resetPassword, signup } from '../controllers/auth_controller';
+import { forgotPassword, login, resetPassword, signup } from '../controllers/auth_controller';
 import { deleteUser, getUser, getUsers, updatePassword, updateUser } from '../controllers/user_controller';
 import { protect } from '../middlewares/protect';
 import { userPicParser } from '../utils/image_processing/parser';
@@ -9,7 +9,6 @@ import { userCreateValidator, userUpdateValidator } from '../validators/user_val
 const userRouter = express.Router();
 
 userRouter.post('/login', login);
-
 userRouter.post('/signup', userPicParser, userCreateValidator, resizeUserPic, signup);
 
 userRouter
@@ -19,9 +18,9 @@ userRouter
     .delete(protect, deleteUser);
 
 userRouter.patch('/updatePassword', protect, updatePassword);
-
-// userRouter.post('/forgotPassword', forgotPassword);
-
+userRouter.post('/forgotPassword', forgotPassword);
 userRouter.post('/resetPassword', resetPassword);
 
 userRouter.get('/:userID', getUser);
+
+export default userRouter;
