@@ -4,6 +4,16 @@ import catchAsync from '../config/catch_async';
 import User from '../models/user_model';
 import { createSendToken } from './auth_controller';
 
+export const getUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const users = await User.find();
+
+    res.status(200).json({
+        status: 'success',
+        requestedAt: req.requestedAt,
+        users,
+    });
+});
+
 export const getUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findById(req.params.userID).populate([
         {

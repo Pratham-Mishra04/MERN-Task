@@ -8,6 +8,7 @@ declare global {
             requestedAt: string;
             user: UserDocument;
             file: any;
+            files: any;
         }
     }
 }

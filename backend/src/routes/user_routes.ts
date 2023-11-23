@@ -1,18 +1,21 @@
 import * as express from 'express';
-import { login, resetPassword } from '../controllers/auth_controller';
-import { deleteUser, getUser, updatePassword } from '../controllers/user_controller';
+import { login, resetPassword, signup } from '../controllers/auth_controller';
+import { deleteUser, getUser, getUsers, updatePassword, updateUser } from '../controllers/user_controller';
 import { protect } from '../middlewares/protect';
+import { userPicParser } from '../utils/image_processing/parser';
+import { resizeUserPic } from '../utils/image_processing/resize';
+import { userCreateValidator, userUpdateValidator } from '../validators/user_validator';
 
 const userRouter = express.Router();
 
 userRouter.post('/login', login);
 
-// userRouter.post('/signup', userPicUploadParserer, userCreateValidator, resizeUserPic, signup);
+userRouter.post('/signup', userPicParser, userCreateValidator, resizeUserPic, signup);
 
 userRouter
     .route('/')
-    // .get(getAllDocs(User))
-    // .patch(protect, userPicUploadParserer, userUpdateValidator, resizeUserPic, updateUser)
+    .get(getUsers)
+    .patch(protect, userPicParser, userUpdateValidator, resizeUserPic, updateUser)
     .delete(protect, deleteUser);
 
 userRouter.patch('/updatePassword', protect, updatePassword);
