@@ -20,9 +20,10 @@
         "import/extensions":"off",
         "no-underscore-dangle":"warn",
         "no-param-reassign":"warn",
-        "no-unused-vars":"off",
+        "no-unused-vars":"warn",
         "consistent-return":"off",
         "@typescript-eslint/no-explicit-any":"warn",
+        "@typescript-eslint/no-unused-vars":"warn",
         "no-var":"off"
     },
     "ignorePatterns":["dev_scripts"]

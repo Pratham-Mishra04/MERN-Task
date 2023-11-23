@@ -7,6 +7,7 @@ declare global {
         export interface Request {
             requestedAt: string;
             user: UserDocument;
+            file: any;
         }
     }
 }
