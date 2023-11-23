@@ -15,13 +15,15 @@
         "ecmaVersion": 12
     },
     "rules": {
-        "no-console" : "warn",
+        "no-console" : "off",
         "linebreak-style":"off",
         "import/extensions":"off",
         "no-underscore-dangle":"warn",
         "no-param-reassign":"warn",
-        "no-unused-vars":"warn",
-        "consistent-return":"off"
+        "no-unused-vars":"off",
+        "consistent-return":"off",
+        "@typescript-eslint/no-explicit-any":"warn",
+        "no-var":"off"
     },
     "ignorePatterns":["dev_scripts"]
 }
