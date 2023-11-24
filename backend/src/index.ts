@@ -9,6 +9,7 @@ import AppError from './config/app_error';
 import connectToDB from './config/db';
 import { ENV, configENV } from './config/env';
 import ErrorController from './controllers/error_controller';
+import authRouter from './routes/auth_routes';
 import userRouter from './routes/user_routes';
 
 const app: Express = express();
@@ -37,7 +38,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     next();
 });
 
-app.use(userRouter);
+app.use('/', authRouter);
+app.use('/users', userRouter);
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
     next(new AppError(`Cannot find ${req.originalUrl}`, 404));

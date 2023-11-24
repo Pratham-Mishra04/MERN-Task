@@ -11,7 +11,8 @@ interface ENV_struct {
     DATABASE_URL: string;
     DATABASE_PASSWORD: string;
     JWT_KEY: string;
-    JWT_EXP_TIME: string;
+    ACCESS_TOKEN_TTL: string;
+    REFRESH_TOKEN_TTL: string;
     EMAIL_HOST: string;
     EMAIL_PORT: string;
     EMAIL_USER: string;
@@ -26,7 +27,8 @@ const ENV: ENV_struct = {
     DATABASE_URL: 'mongo_url',
     DATABASE_PASSWORD: 'password',
     JWT_KEY: 'secret',
-    JWT_EXP_TIME: '15',
+    ACCESS_TOKEN_TTL: '15',
+    REFRESH_TOKEN_TTL: '15',
     EMAIL_HOST: '',
     EMAIL_PORT: '',
     EMAIL_USER: '',

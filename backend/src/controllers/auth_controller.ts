@@ -8,23 +8,27 @@ import User, { UserDocument } from '../models/user_model';
 import sendEmail from '../utils/mailer';
 
 export const createSendToken = (user: UserDocument, statusCode: number, res: Response) => {
-    const token = jwt.sign({ id: user._id }, ENV.JWT_KEY, {
-        expiresIn: Number(ENV.JWT_EXP_TIME) * 24 * 60,
+    const access_token = jwt.sign({ id: user._id }, ENV.JWT_KEY, {
+        expiresIn: Number(ENV.ACCESS_TOKEN_TTL) * 24 * 60,
+    });
+
+    const refresh_token = jwt.sign({ id: user._id }, ENV.JWT_KEY, {
+        expiresIn: Number(ENV.REFRESH_TOKEN_TTL) * 24 * 60,
     });
     user.password = undefined;
 
     const cookieSettings = {
-        expires: new Date(Date.now() + Number(ENV.JWT_EXP_TIME) * 24 * 60 * 60 * 1000),
+        expires: new Date(Date.now() + Number(ENV.REFRESH_TOKEN_TTL) * 24 * 60 * 60 * 1000),
         httpOnly: true,
         secure: false,
     };
 
     if (ENV.NODE_ENV == 'production') cookieSettings.secure = true;
 
-    res.cookie('token', token, cookieSettings);
+    res.cookie('refresh_token', refresh_token, cookieSettings);
     res.status(statusCode).json({
         status: 'success',
-        token,
+        token: access_token,
         user,
     });
 };
@@ -45,18 +49,18 @@ export const login = catchAsync(async (req: Request, res: Response, next: NextFu
 });
 
 export const logout = catchAsync(async (req: Request, res: Response) => {
-    res.cookie('jwt', 'loggedout', {
+    res.cookie('refresh_token', 'logout', {
         expires: new Date(Date.now() + 1 * 1000),
         httpOnly: true,
     });
-    res.status(200).json({
+    res.status(204).json({
         status: 'success',
         requestedAt: req.requestedAt,
-        message: 'User Loggout Out',
+        message: 'User Logged Out',
     });
 });
 
-export const forgotPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const sendResetURL = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findOne({ username: req.body.username });
     if (!user) return next(new AppError('No User of this username found', 401));
     const resetToken = user.createPasswordResetToken();
@@ -100,4 +104,50 @@ export const resetPassword = catchAsync(async (req: Request, res: Response, next
     await user.save();
 
     createSendToken(user, 200, res);
+});
+
+export const refresh = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const reqBody = req.body;
+
+    const accessTokenString = reqBody.token;
+
+    const accessToken = jwt.verify(accessTokenString, ENV.JWT_KEY) as jwt.JwtPayload;
+
+    if (!accessToken || !accessToken.sub) {
+        throw new Error('Invalid access token');
+    }
+
+    const userId = accessToken.sub;
+
+    const user = await User.findById(userId);
+
+    if (!user || user.id === undefined) {
+        return res.status(401).json({ status: 'error', message: 'User of this token no longer exists' });
+    }
+
+    const refreshTokenString = req.cookies.refresh_token;
+
+    if (!refreshTokenString) {
+        return res.status(401).json({ status: 'error', message: 'Refresh token not provided' });
+    }
+
+    const refreshToken = jwt.verify(refreshTokenString, ENV.JWT_KEY) as jwt.JwtPayload;
+
+    if (!refreshToken) {
+        throw new Error('Invalid refresh token');
+    }
+
+    if (refreshToken.sub !== userId) {
+        return res.status(401).json({ status: 'error', message: 'Mismatched Tokens' });
+    }
+
+    if (Date.now() > refreshToken.exp! * 1000) {
+        return res.status(401).json({ status: 'error', message: 'Refresh token expired' });
+    }
+
+    const access_token = jwt.sign({ id: user._id }, ENV.JWT_KEY, {
+        expiresIn: Number(ENV.ACCESS_TOKEN_TTL) * 24 * 60,
+    });
+
+    return res.status(200).json({ status: 'success', token: access_token });
 });
