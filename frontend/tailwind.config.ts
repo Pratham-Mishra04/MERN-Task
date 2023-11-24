@@ -6,9 +6,11 @@ const config: Config = {
     extend: {
       fontFamily: {
         primary: ['Bodoni Moda'],
+        secondary: ['Smooch Sans'],
       },
       colors: {
-        primary_black: '#2e2c2c',
+        primary: '#2e2c2c',
+        secondary: '#B89D4F',
       },
       backgroundColor: {
         backdrop: '#0000003f',
