@@ -1,6 +1,6 @@
 import * as multer from 'multer';
-import { multipleImgFilter, userPicFilter } from './configs/filter';
-import { multipleImgDiskStorage, userPicDiskStorage } from './configs/storage';
+import { multipleImgFilter, userPicFilter } from './config/filter';
+import { multipleImgDiskStorage, userPicDiskStorage } from './config/storage';
 
 const userPicUpload = multer({
     fileFilter: userPicFilter,

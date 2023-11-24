@@ -26,5 +26,5 @@
         "@typescript-eslint/no-unused-vars":"warn",
         "no-var":"off"
     },
-    "ignorePatterns":["dev_scripts"]
+    "ignorePatterns":["scripts"]
 }
