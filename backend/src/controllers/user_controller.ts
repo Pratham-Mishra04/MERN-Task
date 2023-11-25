@@ -64,8 +64,7 @@ export const deleteUser = catchAsync(async (req: Request, res: Response, next: N
 
 export const updatePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findById(req.user.id).select('+password');
-    if (!(await user.correctPassword(req.body.password)))
-        return next(new AppError('Incorect Password, Please enter the corrent password', 401));
+    if (!(await user.correctPassword(req.body.password))) return next(new AppError('Incorrect Password', 401));
 
     user.password = req.body.newPassword;
     await user.save();

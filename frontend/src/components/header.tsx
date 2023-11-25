@@ -1,11 +1,20 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
+import Cookies from 'js-cookie';
 
 interface Props {
   index: number;
 }
 
 const Header = ({ index }: Props) => {
+  const router = useRouter();
+  const handleLogout = () => {
+    Cookies.remove('id');
+    Cookies.remove('token');
+
+    router.replace('/login');
+  };
   return (
     <div className="w-full h-24 bg-white bg-opacity-50 backdrop-blur-md sticky top-0 flex justify-between items-center px-16 border-b-[1px] border-gray-200 z-50">
       <div className="text-3xl font-primary font-bold text-primary">MERNary</div>
@@ -17,7 +26,9 @@ const Header = ({ index }: Props) => {
           MY PROFILE
         </Link>
       </div>
-      <div className="font-secondary text-2xl">SIGN OUT</div>
+      <div onClick={handleLogout} className="font-secondary text-2xl cursor-pointer">
+        LOG OUT
+      </div>
     </div>
   );
 };

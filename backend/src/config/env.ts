@@ -46,6 +46,11 @@ const configENV = (): void => {
             process.exit();
         }
 
+        if (key == 'NODE_ENV' && val != 'development' && val != 'production') {
+            console.error(`Fatal Error: Invalid environment variable: ${key}`);
+            process.exit();
+        }
+
         ENV[key] = val;
     });
     console.log('- All Environment Variables Present');

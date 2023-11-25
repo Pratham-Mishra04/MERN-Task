@@ -2,6 +2,7 @@ import Header from '@/components/header';
 import React from 'react';
 import Image from 'next/image';
 import ExhibitionCard from '@/components/exhibition_card';
+import Protect from '@/utils/protect';
 
 const Profile = () => {
   return (
@@ -34,4 +35,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Protect(Profile);

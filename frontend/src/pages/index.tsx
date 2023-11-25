@@ -1,6 +1,7 @@
 import Header from '@/components/header';
+import Protect from '@/utils/protect';
 
-export default function Home() {
+const Home = () => {
   return (
     <div>
       <Header index={0} />
@@ -11,4 +12,6 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default Protect(Home);
