@@ -1,10 +1,16 @@
 import * as multer from 'multer';
-import { multipleImgFilter, userPicFilter } from './config/filter';
-import { multipleImgDiskStorage, userPicDiskStorage } from './config/storage';
+import { multipleImgFilter, singleImgFilter } from './config/filter';
+import { exhibitionPicDiskStorage, multipleImgDiskStorage, userPicDiskStorage } from './config/storage';
 
 const userPicUpload = multer({
-    fileFilter: userPicFilter,
+    fileFilter: singleImgFilter,
     storage: userPicDiskStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+});
+
+const exhibitionPicUpload = multer({
+    fileFilter: singleImgFilter,
+    storage: exhibitionPicDiskStorage,
     limits: { fileSize: 5 * 1024 * 1024 },
 });
 
@@ -24,5 +30,7 @@ export const userPicParser = userPicUpload.fields([
         maxCount: 1,
     },
 ]);
+
+export const exhibitionPicParser = exhibitionPicUpload.single('image');
 
 export const multipleImgParser = multipleImgUpload.any();

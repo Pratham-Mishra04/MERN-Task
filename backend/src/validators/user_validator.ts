@@ -1,9 +1,8 @@
-import { Request } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import * as fs from 'fs';
 import * as Joi from 'joi';
 import { isValidNumber } from 'libphonenumber-js';
 import AppError from '../config/app_error';
-import catchAsync from '../config/catch_async';
 import User from '../models/user_model';
 
 const userCreateSchema = Joi.object({
@@ -45,7 +44,7 @@ const userUpdateSchema = Joi.object({
     passwordResetTokenExpiresIn: Joi.forbidden(),
 });
 
-export const userCreateValidator = catchAsync(async (req, res, next) => {
+export const userCreateValidator = async (req: Request, res: Response, next: NextFunction) => {
     try {
         await userCreateSchema.validateAsync(req.body);
 
@@ -57,7 +56,7 @@ export const userCreateValidator = catchAsync(async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-});
+};
 
 const removeReqFiles = (req: Request) => {
     if (req.file) {
@@ -66,7 +65,7 @@ const removeReqFiles = (req: Request) => {
     }
 };
 
-export const userUpdateValidator = catchAsync(async (req, res, next) => {
+export const userUpdateValidator = async (req: Request, res: Response, next: NextFunction) => {
     try {
         await userUpdateSchema.validateAsync(req.body);
 
@@ -84,4 +83,4 @@ export const userUpdateValidator = catchAsync(async (req, res, next) => {
         removeReqFiles(req);
         next(error);
     }
-});
+};

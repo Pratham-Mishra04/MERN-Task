@@ -12,43 +12,45 @@ import ErrorController from './controllers/error_controller';
 import authRouter from './routes/auth_routes';
 import userRouter from './routes/user_routes';
 
-const app: Express = express();
+const server = async () => {
+    configENV();
 
-configENV();
+    await connectToDB();
 
-app.use(express.json());
-app.use(
-    cors({
-        allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'Authorization'],
-        credentials: true,
-        methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-        origin: ENV.FRONTEND_URL,
-    })
-);
-app.use(helmet());
-app.use(ExpressMongoSanitize());
-if (ENV.NODE_ENV === 'development') app.use(morgan('dev'));
+    const app: Express = express();
 
-app.use(express.static(path.join(__dirname, '../public')));
+    app.use(express.json());
+    app.use(
+        cors({
+            allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'Authorization'],
+            credentials: true,
+            methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+            origin: ENV.FRONTEND_URL,
+        })
+    );
+    app.use(helmet());
+    app.use(ExpressMongoSanitize());
+    if (ENV.NODE_ENV === 'development') app.use(morgan('dev'));
 
-connectToDB();
+    app.use(express.static(path.join(__dirname, '../public')));
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-    req.requestedAt = new Date().toISOString();
-    next();
-});
+    app.use((req: Request, res: Response, next: NextFunction) => {
+        req.requestedAt = new Date().toISOString();
+        next();
+    });
 
-app.use('/', authRouter);
-app.use('/users', userRouter);
+    app.use('/', authRouter);
+    app.use('/users', userRouter);
 
-app.all('*', (req: Request, res: Response, next: NextFunction) => {
-    next(new AppError(`Cannot find ${req.originalUrl}`, 404));
-});
+    app.all('*', (req: Request, res: Response, next: NextFunction) => {
+        next(new AppError(`Cannot find ${req.originalUrl}`, 404));
+    });
 
-app.use(ErrorController);
+    app.use(ErrorController);
 
-app.listen(ENV.PORT, () => {
-    console.log(`Server is running on http://127.0.0.1:${ENV.PORT}`);
-});
+    app.listen(ENV.PORT, () => {
+        console.log(`Server is running on http://127.0.0.1:${ENV.PORT}`);
+    });
+};
 
-export default app;
+server();

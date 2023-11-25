@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import AppError from '../config/app_error';
 import { ENV } from '../config/env';
 
@@ -33,7 +33,7 @@ const JoiErrorHandler = err => {
     return new AppError(message, 400);
 };
 
-const ErrorController = (err, req: Request, res: Response) => {
+const ErrorController = (err, req: Request, res: Response, next: NextFunction) => {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
     if (ENV.NODE_ENV === 'development') {

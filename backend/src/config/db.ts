@@ -6,8 +6,8 @@ const URL: string =
         ? 'mongodb://127.0.0.1:27017'
         : ENV.DATABASE_URL.replace('<password>', ENV.DATABASE_PASSWORD);
 
-const connectToDB = () =>
-    mongoose
+const connectToDB = async () =>
+    await mongoose
         .connect(URL)
         .then(() => console.log('Connected to Database!'))
         .catch(err => {

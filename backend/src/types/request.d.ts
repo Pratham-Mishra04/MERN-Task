@@ -1,3 +1,4 @@
+import { ExhibitionDocument } from '../models/exhibition_model';
 import { UserDocument } from '../models/user_model';
 
 export {};
@@ -7,6 +8,7 @@ declare global {
         export interface Request {
             requestedAt: string;
             user: UserDocument;
+            exhibition: ExhibitionDocument;
         }
     }
 }

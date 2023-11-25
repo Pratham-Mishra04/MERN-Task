@@ -25,16 +25,16 @@ export const resizeUserPic = async (req: Request, res: Response, next: NextFunct
 
     if (req.body['coverPic']) files.push(req.files['coverPic'][0]);
 
-    files.forEach(file => {
+    files.forEach(async file => {
         const picPath = `${file.destination}/${file.filename}`;
         const toPath = `public/users/${file.fieldname}s/${slugify(
             req.user ? req.user.username : req.body.username
         )}-${Date.now()}.jpeg`;
 
-        const d1 = file.fieldname === 'profilePic' ? 500 : 1500;
-        const d2 = file.fieldname === 'profilePic' ? 500 : 1000;
+        const d1 = file.fieldname === 'profilePic' ? 1080 : 1920;
+        const d2 = file.fieldname === 'profilePic' ? 1080 : 1080;
 
-        resizePic(picPath, toPath, d1, d2);
+        await resizePic(picPath, toPath, d1, d2);
 
         req.body[`${file.fieldname}`] = toPath.split('/')[3];
     });
@@ -50,6 +50,20 @@ export const resizeUserPic = async (req: Request, res: Response, next: NextFunct
     //         }
     //     });
     // }
+
+    next();
+};
+
+export const resizeExhibitionPic = async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.file && !req.files) return next();
+
+    const file = req.file || req.files['image'];
+    const picPath = `${file.destination}/${file.filename}`;
+    const toPath = `public/exhibitions/${req.user.username}-${slugify(req.body.title)}-${Date.now()}.jpeg`;
+
+    await resizePic(picPath, toPath, 1080, 1080);
+
+    req.body['image'] = toPath.split('/')[2];
 
     next();
 };

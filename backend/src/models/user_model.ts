@@ -17,6 +17,8 @@ interface UserInput {
 }
 
 export interface UserDocument extends UserInput, mongoose.Document {
+    _id: mongoose.Schema.Types.ObjectId;
+    id: string;
     noFollowers: number;
     passwordChangedAt: Date;
     passwordResetToken: string;

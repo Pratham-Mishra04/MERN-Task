@@ -1,5 +1,6 @@
 import * as multer from 'multer';
 import * as path from 'path';
+import slugify from 'slugify';
 
 export const userPicDiskStorage = multer.diskStorage({
     destination(req, file, callback) {
@@ -9,6 +10,17 @@ export const userPicDiskStorage = multer.diskStorage({
         const name = `${req.user ? req.user.username : req.body.username}-${Date.now()}${path.extname(
             file.originalname
         )}`;
+        req.body[`${file.fieldname}`] = name;
+        callback(null, name);
+    },
+});
+
+export const exhibitionPicDiskStorage = multer.diskStorage({
+    destination(req, file, callback) {
+        callback(null, `./public/exhibitions`);
+    },
+    filename(req, file, callback) {
+        const name = `${req.user.username}-${slugify(req.body.title)}-${Date.now()}${path.extname(file.originalname)}`;
         req.body[`${file.fieldname}`] = name;
         callback(null, name);
     },

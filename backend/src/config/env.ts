@@ -27,8 +27,8 @@ const ENV: ENV_struct = {
     DATABASE_URL: 'mongo_url',
     DATABASE_PASSWORD: 'password',
     JWT_KEY: 'secret',
-    ACCESS_TOKEN_TTL: '15',
-    REFRESH_TOKEN_TTL: '15',
+    ACCESS_TOKEN_TTL: '15', // days
+    REFRESH_TOKEN_TTL: '15', // days
     EMAIL_HOST: '',
     EMAIL_PORT: '',
     EMAIL_USER: '',
@@ -48,6 +48,7 @@ const configENV = (): void => {
 
         ENV[key] = val;
     });
+    console.log('- All Environment Variables Present');
 };
 
 export { ENV, configENV };

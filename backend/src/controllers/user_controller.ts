@@ -50,7 +50,7 @@ export const updateUser = catchAsync(async (req: Request, res: Response, next: N
 });
 
 export const deleteUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    await User.findByIdAndUpdate(req.user.id, { active: false });
+    await User.findByIdAndDelete(req.user.id);
     res.status(204).json({
         status: 'success',
         requestedAt: req.requestedAt,
