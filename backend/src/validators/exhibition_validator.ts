@@ -5,6 +5,7 @@ import * as Joi from 'joi';
 const exhibitionCreateSchema = Joi.object({
     title: Joi.string().trim().required(),
     description: Joi.string().trim(),
+    category: Joi.string().required(),
     image: Joi.string().required(),
 });
 

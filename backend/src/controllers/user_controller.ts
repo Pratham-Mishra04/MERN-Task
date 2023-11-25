@@ -1,11 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import AppError from '../config/app_error';
 import catchAsync from '../config/catch_async';
+import Features from '../helpers/features';
 import User from '../models/user_model';
 import { createSendToken } from './auth_controller';
 
 export const getUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const users = await User.find();
+    const features = new Features(User.find(), req.query);
+    features.search(0).sort().paginator();
+
+    const users = await features.query;
 
     res.status(200).json({
         status: 'success',

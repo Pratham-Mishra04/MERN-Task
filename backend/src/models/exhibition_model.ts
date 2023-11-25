@@ -6,6 +6,7 @@ export interface ExhibitionDocument extends mongoose.Document {
     id: string;
     title: string;
     description: string;
+    category: string;
     image: string;
     userID: mongoose.Schema.Types.ObjectId;
     user: UserDocument;
@@ -18,7 +19,15 @@ const exhibitionSchema = new mongoose.Schema(
             trim: true,
             required: true,
         },
-        description: String,
+        description: {
+            type: String,
+            trim: true,
+        },
+        category: {
+            type: String,
+            trim: true,
+            required: true,
+        },
         image: {
             type: String,
             required: true,

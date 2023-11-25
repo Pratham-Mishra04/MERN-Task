@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import AppError from '../config/app_error';
 import catchAsync from '../config/catch_async';
+import Features from '../helpers/features';
 import Exhibition from '../models/exhibition_model';
 
 export const getExhibitions = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const exhibitions = await Exhibition.find();
+    const features = new Features(Exhibition.find(), req.query);
+    features.search(1).filter().sort().paginator();
+
+    const exhibitions = await features.query;
 
     res.status(200).json({
         status: 'success',
@@ -34,7 +38,7 @@ export const newExhibition = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const updateExhibition = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const exhibition = await Exhibition.findByIdAndUpdate(req.exhibition.id, req.body, {
+    const exhibition = await req.exhibition.updateOne(req.body, {
         new: true,
         runValidators: true,
     });
@@ -47,7 +51,7 @@ export const updateExhibition = catchAsync(async (req: Request, res: Response, n
 });
 
 export const deleteExhibition = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    await Exhibition.findByIdAndDelete(req.exhibition.id);
+    await req.exhibition.deleteOne();
     res.status(204).json({
         status: 'success',
         requestedAt: req.requestedAt,
