@@ -11,7 +11,6 @@ interface UserInput {
     username: string;
     phoneNo: string;
     bio: string;
-    tags: string[];
     tagline: string;
     followers: mongoose.Schema.Types.ObjectId[];
 }
@@ -67,7 +66,6 @@ const userSchema = new mongoose.Schema(
         },
         bio: String,
         tagline: String,
-        tags: [String],
         followers: [
             {
                 type: mongoose.Schema.Types.ObjectId,

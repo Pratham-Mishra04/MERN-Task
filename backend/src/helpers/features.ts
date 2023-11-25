@@ -22,12 +22,12 @@ class Features<T> {
     search(index: number): this {
         const searchStr = this.queryStr.search || '';
 
+        const regexArr = [];
+
         const searchComponents = searchStr.split(' ');
         searchComponents.forEach(item => {
             regexArr.push(new RegExp(item, 'i'));
         });
-
-        const regexArr = [];
 
         regexArr.push(new RegExp(searchStr, 'i'));
         regexArr.push(new RegExp(searchStr.replace(' ', ''), 'i'));

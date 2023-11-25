@@ -10,6 +10,7 @@ import connectToDB from './config/db';
 import { ENV, configENV } from './config/env';
 import ErrorController from './controllers/error_controller';
 import authRouter from './routes/auth_routes';
+import exhibitionRouter from './routes/exhibition_routes';
 import userRouter from './routes/user_routes';
 
 const server = async () => {
@@ -41,6 +42,7 @@ const server = async () => {
 
     app.use('/', authRouter);
     app.use('/users', userRouter);
+    app.use('/exhibitions', exhibitionRouter);
 
     app.all('*', (req: Request, res: Response, next: NextFunction) => {
         next(new AppError(`Cannot find ${req.originalUrl}`, 404));

@@ -18,6 +18,16 @@ export const getUsers = catchAsync(async (req: Request, res: Response, next: Nex
     });
 });
 
+export const getMe = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user;
+
+    res.status(200).json({
+        status: 'success',
+        requestedAt: req.requestedAt,
+        user,
+    });
+});
+
 export const getUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findById(req.params.userID).populate([
         {
@@ -40,8 +50,8 @@ export const getUser = catchAsync(async (req: Request, res: Response, next: Next
     });
 });
 
-export const updateUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const user = await User.findByIdAndUpdate(req.user.id, req.body, {
+export const updateMe = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = await req.user.updateOne(req.body, {
         new: true,
         runValidators: true,
     });
@@ -53,8 +63,8 @@ export const updateUser = catchAsync(async (req: Request, res: Response, next: N
     });
 });
 
-export const deleteUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    await User.findByIdAndDelete(req.user.id);
+export const deleteMe = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    await req.user.deleteOne();
     res.status(204).json({
         status: 'success',
         requestedAt: req.requestedAt,
