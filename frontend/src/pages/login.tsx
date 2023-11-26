@@ -29,6 +29,8 @@ const Login = () => {
         withCredentials: true,
       })
       .then(res => {
+        console.log(res);
+
         if (res.status === 200) {
           Toaster.stopLoad(toaster, 'Logged In!', 1);
           const user = res.data.user;
@@ -45,6 +47,7 @@ const Login = () => {
         setMutex(false);
       })
       .catch(err => {
+        console.log(err);
         if (err.response?.data?.message) Toaster.stopLoad(toaster, err.response.data.message, 0);
         else Toaster.stopLoad(toaster, 'Internal Server Error', 0);
 
