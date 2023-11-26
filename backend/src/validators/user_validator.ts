@@ -7,8 +7,8 @@ import User from '../models/user_model';
 
 const userCreateSchema = Joi.object({
     name: Joi.string()
-        .pattern(/^[A-Za-z]+$/, 'alpha')
         .trim()
+        .pattern(/^[A-Za-z\s]+$/, 'alpha')
         .required(),
     email: Joi.string().email().trim().lowercase().required(),
     username: Joi.string().trim().lowercase().required(),
@@ -21,7 +21,7 @@ const userCreateSchema = Joi.object({
 
 const userUpdateSchema = Joi.object({
     name: Joi.string()
-        .pattern(/^[A-Za-z]+$/, 'alpha')
+        .pattern(/^[A-Za-z\s]+$/, 'alpha')
         .trim(),
     email: Joi.string().email().trim().lowercase(),
     username: Joi.forbidden(),

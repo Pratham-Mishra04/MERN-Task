@@ -27,7 +27,7 @@ const ENV: ENV_struct = {
     DATABASE_URL: 'mongo_url',
     DATABASE_PASSWORD: 'password',
     JWT_KEY: 'secret',
-    ACCESS_TOKEN_TTL: '15', // days
+    ACCESS_TOKEN_TTL: '15', // minutes
     REFRESH_TOKEN_TTL: '15', // days
     EMAIL_HOST: '',
     EMAIL_PORT: '',

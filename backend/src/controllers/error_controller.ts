@@ -22,7 +22,7 @@ const ValidationErrorHandler = err => {
 
 const JWTErrorHandler = (err, errName) => {
     if (errName === 'invalid') return new AppError('Invalid Token. Please Login Again', 401);
-    return new AppError('Token Expired. Please Login Again', 401);
+    return new AppError('Token Expired. Please Login Again', 403);
 };
 
 const JoiErrorHandler = err => {
@@ -49,9 +49,7 @@ const ErrorController = (err, req: Request, res: Response, next: NextFunction) =
         if (err.code === 11000) error = DuplicateErrorHandler(error);
         if (err._message) if (err._message.match(/validation failed/)) error = ValidationErrorHandler(error);
         if (err.name === 'JsonWebTokenError') error = JWTErrorHandler(error, 'invalid');
-        if (err.name === 'TokenExpiredError')
-            //TODO not working
-            error = JWTErrorHandler(error, 'expired');
+        if (err.name === 'TokenExpiredError') error = JWTErrorHandler(error, 'expired');
         if (err.isJoi) error = JoiErrorHandler(error);
 
         if (error.isOperationError) {

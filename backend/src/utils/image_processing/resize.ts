@@ -25,16 +25,16 @@ export const resizeUserPic = async (req: Request, res: Response, next: NextFunct
 
     if (req.body['coverPic']) files.push(req.files['coverPic'][0]);
 
-    files.forEach(async file => {
+    files.forEach(file => {
         const picPath = `${file.destination}/${file.filename}`;
         const toPath = `public/users/${file.fieldname}s/${slugify(
             req.user ? req.user.username : req.body.username
         )}-${Date.now()}.jpeg`;
 
         const d1 = file.fieldname === 'profilePic' ? 1080 : 1920;
-        const d2 = file.fieldname === 'profilePic' ? 1080 : 1080;
+        const d2 = file.fieldname === 'profilePic' ? 1080 : 1320;
 
-        await resizePic(picPath, toPath, d1, d2);
+        resizePic(picPath, toPath, d1, d2);
 
         req.body[`${file.fieldname}`] = toPath.split('/')[3];
     });

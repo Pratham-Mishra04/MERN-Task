@@ -51,7 +51,7 @@ export const getUser = catchAsync(async (req: Request, res: Response, next: Next
 });
 
 export const updateMe = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const user = await req.user.updateOne(req.body, {
+    const user = await User.findByIdAndUpdate(req.user.id, req.body, {
         new: true,
         runValidators: true,
     });

@@ -9,11 +9,11 @@ import sendEmail from '../utils/mailer';
 
 export const createSendToken = (user: UserDocument, statusCode: number, res: Response) => {
     const access_token = jwt.sign({ id: user._id }, ENV.JWT_KEY, {
-        expiresIn: Number(ENV.ACCESS_TOKEN_TTL) * 24 * 60,
+        expiresIn: Number(ENV.ACCESS_TOKEN_TTL) * 60 * 60,
     });
 
     const refresh_token = jwt.sign({ id: user._id }, ENV.JWT_KEY, {
-        expiresIn: Number(ENV.REFRESH_TOKEN_TTL) * 24 * 60,
+        expiresIn: Number(ENV.REFRESH_TOKEN_TTL) * 24 * 60 * 60,
     });
     user.password = undefined;
 
@@ -114,7 +114,7 @@ export const refresh = catchAsync(async (req: Request, res: Response, next: Next
     const accessToken = jwt.verify(accessTokenString, ENV.JWT_KEY) as jwt.JwtPayload;
 
     if (!accessToken || !accessToken.sub) {
-        throw new Error('Invalid access token');
+        throw new AppError('Invalid access token', 401);
     }
 
     const userId = accessToken.sub;
@@ -134,7 +134,7 @@ export const refresh = catchAsync(async (req: Request, res: Response, next: Next
     const refreshToken = jwt.verify(refreshTokenString, ENV.JWT_KEY) as jwt.JwtPayload;
 
     if (!refreshToken) {
-        throw new Error('Invalid refresh token');
+        throw new AppError('Invalid refresh token', 401);
     }
 
     if (refreshToken.sub !== userId) {
@@ -146,7 +146,7 @@ export const refresh = catchAsync(async (req: Request, res: Response, next: Next
     }
 
     const access_token = jwt.sign({ id: user._id }, ENV.JWT_KEY, {
-        expiresIn: Number(ENV.ACCESS_TOKEN_TTL) * 24 * 60,
+        expiresIn: Number(ENV.ACCESS_TOKEN_TTL) * 60 * 60,
     });
 
     return res.status(200).json({ status: 'success', token: access_token });
