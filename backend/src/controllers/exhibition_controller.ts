@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import * as fs from 'fs';
 import AppError from '../config/app_error';
 import catchAsync from '../config/catch_async';
 import Features from '../helpers/features';
@@ -38,7 +39,7 @@ export const newExhibition = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const updateExhibition = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const exhibition = await req.exhibition.updateOne(req.body, {
+    await req.exhibition.updateOne(req.body, {
         new: true,
         runValidators: true,
     });
@@ -46,12 +47,17 @@ export const updateExhibition = catchAsync(async (req: Request, res: Response, n
     res.status(200).json({
         status: 'success',
         requestedAt: req.requestedAt,
-        exhibition,
     });
 });
 
 export const deleteExhibition = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     await req.exhibition.deleteOne();
+
+    if (req.exhibition.image && req.exhibition.image != '') {
+        const picPath = `public/exhibitions/${req.exhibition.image}`;
+        fs.unlinkSync(picPath);
+    }
+
     res.status(204).json({
         status: 'success',
         requestedAt: req.requestedAt,

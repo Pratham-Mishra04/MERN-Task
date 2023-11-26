@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import * as fs from 'fs';
 import AppError from '../config/app_error';
 import catchAsync from '../config/catch_async';
 import Features from '../helpers/features';
@@ -51,10 +52,22 @@ export const getUser = catchAsync(async (req: Request, res: Response, next: Next
 });
 
 export const updateMe = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const oldProfilePic = req.user.profilePic;
+    const oldCoverPic = req.user.coverPic;
+
     const user = await User.findByIdAndUpdate(req.user.id, req.body, {
         new: true,
         runValidators: true,
     });
+
+    if (req.body.profilePic && req.body.profilePic != '') {
+        const picPath = `public/users/profilePics/${oldProfilePic}`;
+        fs.unlinkSync(picPath);
+    }
+    if (req.body.coverPic && req.body.coverPic != '') {
+        const picPath = `public/users/coverPics/${oldCoverPic}`;
+        fs.unlinkSync(picPath);
+    }
 
     res.status(200).json({
         status: 'success',
@@ -65,6 +78,16 @@ export const updateMe = catchAsync(async (req: Request, res: Response, next: Nex
 
 export const deleteMe = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     await req.user.deleteOne();
+
+    if (req.user.profilePic && req.user.profilePic != '') {
+        const picPath = `public/users/profilePics/${req.user.profilePic}`;
+        fs.unlinkSync(picPath);
+    }
+    if (req.user.coverPic && req.user.coverPic != '') {
+        const picPath = `public/users/coverPics/${req.user.coverPic}`;
+        fs.unlinkSync(picPath);
+    }
+
     res.status(204).json({
         status: 'success',
         requestedAt: req.requestedAt,

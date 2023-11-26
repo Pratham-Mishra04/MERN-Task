@@ -19,7 +19,7 @@ const ConfirmDelete = ({ handleDelete, setShow, title = 'Confirm Delete?' }: Pro
   }, []);
   return (
     <>
-      <div className="fixed top-48 max-md:top-20 w-1/3 max-lg:w-5/6 h-1/3 max-lg:h-fit backdrop-blur-2xl bg-white flex flex-col gap-2 max-lg:gap-0 rounded-lg p-8 font-primary overflow-y-auto border-[1px] border-primary_black right-1/2 shadow-lg translate-x-1/2 animate-fade_third z-50 max-lg:z-[60]">
+      <div className="fixed top-48 max-md:top-20 w-1/3 max-lg:w-5/6 h-1/3 max-lg:h-fit backdrop-blur-2xl bg-white flex flex-col gap-2 max-lg:gap-0 rounded-lg p-8 font-sans overflow-y-auto border-[1px] border-primary right-1/2 shadow-2xl translate-x-1/2 animate-fade_third z-50 max-lg:z-[60]">
         <div className="w-full flex justify-end">
           <X className="cursor-pointer" onClick={() => setShow(false)} size={32} />
         </div>
@@ -31,7 +31,7 @@ const ConfirmDelete = ({ handleDelete, setShow, title = 'Confirm Delete?' }: Pro
 
           <div
             onClick={handleDelete}
-            className="w-1/3 max-lg:w-1/2 mx-auto text-center bg-primary_comp border-2 border-[#1f1f1f] hover:text-white py-2 rounded-xl text-xl hover:bg-[#ab3232] cursor-pointer transition-ease-200"
+            className="w-1/3 max-lg:w-1/2 mx-auto text-center border-2 border-[#1f1f1f] hover:text-white py-2 rounded-xl text-xl hover:bg-[#ab3232] cursor-pointer transition-ease-200"
           >
             Confirm
           </div>

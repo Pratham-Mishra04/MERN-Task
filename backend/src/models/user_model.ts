@@ -22,6 +22,7 @@ export interface UserDocument extends UserInput, mongoose.Document {
     passwordChangedAt: Date;
     passwordResetToken: string;
     passwordResetTokenExpiresIn: Date;
+    createdAt: Date;
     correctPassword(password: string): Promise<boolean>;
     changedPasswordAfter(JWTTimestrap: number): boolean;
     createPasswordResetToken(): string;
@@ -74,6 +75,10 @@ const userSchema = new mongoose.Schema(
         ],
         passwordResetToken: String,
         passwordResetTokenExpiresIn: Date,
+        createdAt: {
+            type: Date,
+            default: Date.now(),
+        },
     },
     {
         toJSON: { virtuals: true },

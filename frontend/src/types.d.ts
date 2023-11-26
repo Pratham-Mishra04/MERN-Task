@@ -6,6 +6,7 @@ export interface User {
   coverPic: string;
   bio: string;
   tagline: string;
+  createdAt: Date;
 }
 
 export interface Exhibition {
@@ -15,5 +16,6 @@ export interface Exhibition {
   category: string;
   image: string;
   userID: string;
-  user: User;
+  user: User | null;
+  createdAt: Date;
 }

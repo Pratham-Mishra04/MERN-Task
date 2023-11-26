@@ -10,6 +10,7 @@ export interface ExhibitionDocument extends mongoose.Document {
     image: string;
     userID: mongoose.Schema.Types.ObjectId;
     user: UserDocument;
+    createdAt: Date;
 }
 
 const exhibitionSchema = new mongoose.Schema(
@@ -36,6 +37,10 @@ const exhibitionSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now(),
         },
     },
     {

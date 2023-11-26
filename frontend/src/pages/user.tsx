@@ -16,6 +16,7 @@ const initialUser: User = {
   bio: '',
   profilePic: 'default.jpg',
   coverPic: 'default.jpg',
+  createdAt: new Date(),
 };
 
 interface Props {

@@ -9,6 +9,7 @@ import Exhibitions from '@/sections/exhibitions';
 import patchHandler from '@/handlers/patch_handler';
 import { Check, ImageSquare, PencilSimple, X } from '@phosphor-icons/react';
 import { resizeImage } from '@/utils/resize_image';
+import Loader from '@/components/loader';
 
 const initialUser: User = {
   id: '',
@@ -18,6 +19,7 @@ const initialUser: User = {
   bio: '',
   profilePic: 'default.jpg',
   coverPic: 'default.jpg',
+  createdAt: new Date(),
 };
 
 const Profile = () => {
@@ -204,7 +206,7 @@ const Profile = () => {
               />
             </div>
           ) : (
-            <label className="relative" htmlFor="userPic">
+            <label className="w-40 h-40 rounded-full relative" htmlFor="userPic">
               <div className="w-40 h-40 absolute top-0 left-0 rounded-full flex-center bg-white transition-ease-200 cursor-pointer opacity-0 hover:opacity-50">
                 <PencilSimple color="black" size={32} />
               </div>
@@ -357,7 +359,7 @@ const Profile = () => {
           </>
         )}
       </div>
-      <Exhibitions userID={user.id} />
+      {loading ? <></> : <Exhibitions userID={user.id} />}
     </div>
   );
 };
