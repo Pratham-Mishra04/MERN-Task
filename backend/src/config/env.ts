@@ -50,7 +50,6 @@ const configENV = (): void => {
             console.error(`Fatal Error: Invalid environment variable: ${key}`);
             process.exit();
         }
-
         ENV[key] = val;
     });
     console.log('- All Environment Variables Present');

@@ -107,7 +107,7 @@ const Login = () => {
             <ArrowRight size={20} weight="regular" />
           </button>
 
-          <div onClick={() => router.push('/singup')} className="text-gray-400 text-sm cursor-pointer">
+          <div onClick={() => router.push('/signup')} className="text-gray-400 text-sm cursor-pointer">
             <span className="font-medium hover:underline underline-offset-2">Don&apos;t have an account?</span>
           </div>
         </div>

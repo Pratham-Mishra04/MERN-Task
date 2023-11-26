@@ -22,7 +22,7 @@ const ExhibitionCard = ({
 }: Props) => {
   const userID = Cookies.get('id');
   return (
-    <div className={`w-full flex ${index % 2 == 0 ? '' : 'flex-row-reverse'} items-center gap-20 py-20 relative`}>
+    <div className={`w-full flex ${index % 2 == 0 ? '' : 'flex-row-reverse'} items-center gap-20 py-12 relative`}>
       {exhibition.userID == userID ? (
         <>
           <PencilSimple

@@ -30,18 +30,7 @@ export const getMe = catchAsync(async (req: Request, res: Response, next: NextFu
 });
 
 export const getUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const user = await User.findById(req.params.userID).populate([
-        {
-            path: 'following',
-            select: {
-                id: 1,
-                username: 1,
-                name: 1,
-                profilePic: 1,
-                tagline: 1,
-            },
-        },
-    ]);
+    const user = await User.findById(req.params.userID);
     if (!user) return next(new AppError('No user of this ID found', 400));
 
     res.status(200).json({
@@ -60,11 +49,11 @@ export const updateMe = catchAsync(async (req: Request, res: Response, next: Nex
         runValidators: true,
     });
 
-    if (req.body.profilePic && req.body.profilePic != '') {
+    if (req.body.profilePic && req.body.profilePic != '' && req.body.profilePic != 'default.jpg') {
         const picPath = `public/users/profilePics/${oldProfilePic}`;
         fs.unlinkSync(picPath);
     }
-    if (req.body.coverPic && req.body.coverPic != '') {
+    if (req.body.coverPic && req.body.coverPic != '' && req.body.coverPic != 'default.jpg') {
         const picPath = `public/users/coverPics/${oldCoverPic}`;
         fs.unlinkSync(picPath);
     }
@@ -79,11 +68,11 @@ export const updateMe = catchAsync(async (req: Request, res: Response, next: Nex
 export const deleteMe = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     await req.user.deleteOne();
 
-    if (req.user.profilePic && req.user.profilePic != '') {
+    if (req.user.profilePic && req.user.profilePic != '' && req.user.profilePic != 'default.jpg') {
         const picPath = `public/users/profilePics/${req.user.profilePic}`;
         fs.unlinkSync(picPath);
     }
-    if (req.user.coverPic && req.user.coverPic != '') {
+    if (req.user.coverPic && req.user.coverPic != '' && req.user.coverPic != 'default.jpg') {
         const picPath = `public/users/coverPics/${req.user.coverPic}`;
         fs.unlinkSync(picPath);
     }

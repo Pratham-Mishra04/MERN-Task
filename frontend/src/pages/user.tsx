@@ -44,24 +44,29 @@ const UserProfile = ({ userID }: Props) => {
 
   return (
     <div>
-      <Header index={1} />
+      <Header index={0} />
       <div className="w-full p-16 flex justify-end items-center relative gap-8 bg-gray-100">
         <div className="w-2/5 flex flex-col gap-4 z-10">
-          <Image src={'/test.jpg'} alt="" width={10000} height={10000} className="w-40 h-40 rounded-full shadow-2xl" />
-          <div className="w-full overflow-ellipsis font-primary font-medium text-8xl">Pratham Mishra</div>
-          <div className="text-secondary font-secondary uppercase text-xl">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-          </div>
-          <div className="font-secondary">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro accusantium pariatur tempora debitis maxime
-            officiis sunt consequuntur asperiores ex illum culpa optio id, voluptatem perspiciatis iure ipsa esse nulla,
-            quas non, qui mollitia! Dicta reiciendis voluptatem voluptate, quisquam expedita rerum ut consequatur
-            aliquam dolore distinctio esse nisi est similique placeat corrupti maxime aperiam ea.
-          </div>
+          <Image
+            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/profilePics/${user.profilePic}`}
+            alt=""
+            width={10000}
+            height={10000}
+            className="w-40 h-40 rounded-full shadow-2xl"
+          />
+          <div className="w-full overflow-ellipsis font-primary font-medium text-8xl">{user.name}</div>
+          <div className="text-secondary font-secondary uppercase text-xl">{user.tagline}</div>
+          <div className="font-secondary">{user.bio}</div>
         </div>
-        <Image src={'/test.jpg'} alt="" width={10000} height={10000} className="w-3/5 shadow-2xl rounded-sm" />
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/coverPics/${user.coverPic}`}
+          alt=""
+          width={10000}
+          height={10000}
+          className="w-3/5 shadow-2xl rounded-sm"
+        />
       </div>
-      <Exhibitions userID={user.id} />
+      <Exhibitions userID={userID} />
     </div>
   );
 };

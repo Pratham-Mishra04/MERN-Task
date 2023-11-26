@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import User, { UserDocument } from './user_model';
+import { UserDocument } from './user_model';
 
 export interface ExhibitionDocument extends mongoose.Document {
     _id: mongoose.Schema.Types.ObjectId;
@@ -38,6 +38,11 @@ const exhibitionSchema = new mongoose.Schema(
             ref: 'User',
             required: true,
         },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
         createdAt: {
             type: Date,
             default: Date.now(),
@@ -48,10 +53,6 @@ const exhibitionSchema = new mongoose.Schema(
         toObject: { virtuals: true },
     }
 );
-
-exhibitionSchema.virtual('user').get(async function async() {
-    return await User.findById(this.userID);
-});
 
 const Exhibition = mongoose.model<ExhibitionDocument>('Exhibition', exhibitionSchema);
 

@@ -6,7 +6,17 @@ import Features from '../helpers/features';
 import Exhibition from '../models/exhibition_model';
 
 export const getExhibitions = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const features = new Features(Exhibition.find(), req.query);
+    const features = new Features(
+        Exhibition.find().populate({
+            path: 'user',
+            select: {
+                username: 1,
+                name: 1,
+                profilePic: 1,
+            },
+        }),
+        req.query
+    );
     features.search(1).filter().sort().paginator();
 
     const exhibitions = await features.query;

@@ -27,6 +27,7 @@ export const exhibitionCreateValidator = async (req: Request, res: Response, nex
     try {
         await exhibitionCreateSchema.validateAsync(req.body);
         req.body.userID = req.user.id;
+        req.body.user = req.user.id;
         next();
     } catch (error) {
         removeReqFiles(req);
