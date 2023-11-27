@@ -52,7 +52,7 @@ const ExhibitionCard = ({
         height={10000}
         className="w-96 h-96 rounded-sm shadow-2xl"
       />
-      <div className="w-[calc(100%-288px)] flex flex-col gap-8">
+      <div className="w-[30rem] flex flex-col gap-8">
         <div className="flex items-center gap-8">
           <div className="text-secondary uppercase">{moment(exhibition.createdAt).format('MMMM DD')}</div>
           <div className="w-48 h-[1px] bg-secondary"></div>

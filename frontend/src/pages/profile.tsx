@@ -7,7 +7,7 @@ import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import Exhibitions from '@/sections/exhibitions';
 import patchHandler from '@/handlers/patch_handler';
-import { Check, ImageSquare, PencilSimple, X } from '@phosphor-icons/react';
+import { ArrowRight, Check, ImageSquare, PencilSimple, X } from '@phosphor-icons/react';
 import { resizeImage } from '@/utils/resize_image';
 import Loader from '@/components/loader';
 
@@ -291,6 +291,15 @@ const Profile = () => {
               <div className="w-full font-secondary cursor-pointer">{user.bio || 'Click here to add a short bio!'}</div>
             </div>
           )}
+
+          <a
+            className="ml-2 font-secondary underline underline-offset-2 text-xl font-medium flex items-center gap-2"
+            href={`http://192.168.1.7:9966?userID=${user.id}`}
+            target="_blank"
+          >
+            <div> View Virtual Gallery </div>
+            <ArrowRight />
+          </a>
         </div>
 
         <input

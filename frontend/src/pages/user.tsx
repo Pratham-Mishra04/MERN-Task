@@ -7,6 +7,7 @@ import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import { GetServerSidePropsContext } from 'next/types';
 import Exhibitions from '@/sections/exhibitions';
+import { ArrowRight } from '@phosphor-icons/react';
 
 const initialUser: User = {
   id: '',
@@ -57,6 +58,14 @@ const UserProfile = ({ userID }: Props) => {
           <div className="w-full overflow-ellipsis font-primary font-medium text-8xl">{user.name}</div>
           <div className="text-secondary font-secondary uppercase text-xl">{user.tagline}</div>
           <div className="font-secondary">{user.bio}</div>
+          <a
+            className="ml-2 font-secondary underline underline-offset-2 text-xl font-medium flex items-center gap-2"
+            href={`http://192.168.1.7:9966?userID=${user.id}`}
+            target="_blank"
+          >
+            <div> View Virtual Gallery </div>
+            <ArrowRight />
+          </a>
         </div>
         <Image
           src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/coverPics/${user.coverPic}`}

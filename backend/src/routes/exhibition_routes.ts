@@ -16,7 +16,7 @@ const exhibitionRouter = express.Router();
 
 exhibitionRouter
     .route('/')
-    .get(protect, getExhibitions)
+    .get(getExhibitions)
     .post(protect, exhibitionPicParser, exhibitionCreateValidator, resizeExhibitionPic, newExhibition);
 
 exhibitionRouter

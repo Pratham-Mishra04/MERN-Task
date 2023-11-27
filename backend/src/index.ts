@@ -21,17 +21,31 @@ const server = async () => {
     const app: Express = express();
 
     app.use(express.json());
+
+    const allowedOrigins = [ENV.FRONTEND_URL, 'http://192.168.1.7:9966'];
     app.use(
         cors({
             allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'Authorization'],
             credentials: true,
             methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-            origin: ENV.FRONTEND_URL,
+            origin: function (origin, callback) {
+                if (!origin || allowedOrigins.includes(origin)) {
+                    callback(null, true);
+                } else {
+                    callback(new Error('Not allowed by CORS'));
+                }
+            },
         })
     );
-    app.use(helmet());
+
+    app.use(
+        helmet({
+            crossOriginResourcePolicy: false,
+        })
+    );
     app.use(ExpressMongoSanitize());
     if (ENV.NODE_ENV === 'development') app.use(morgan('dev'));
+    else app.use(morgan('short'));
 
     app.use(express.static(path.join(__dirname, '../public')));
 
